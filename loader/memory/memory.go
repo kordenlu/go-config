@@ -201,6 +201,11 @@ func (m *memory) Sync() error {
 		sets = append(sets, ch)
 	}
 
+	// all source err
+	if gErrLen := len(gerr); gErrLen >0 && gErrLen == len(m.sources){
+		return fmt.Errorf("all source loading errors: %s", strings.Join(gerr, "\n"))
+	}
+
 	// merge sets
 	set, err := m.opts.Reader.Merge(sets...)
 	if err != nil {
